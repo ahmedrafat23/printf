@@ -6,7 +6,7 @@
  * @list: list of arguments.
  * Return: width.
  */
-int get_width(const char* format, int* i, va_list list)
+int get_width(const char *format, int *i, va_list list)
 {
 	int current_i = *i + 1, width = 0;
 
