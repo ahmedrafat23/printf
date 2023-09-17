@@ -29,7 +29,7 @@ int get_flags(const char *format, int *i)
 			break;
 	}
 
-	*i = curr_i -1;
+	*i = curr_i - 1;
 
 	return (flags);
 }
