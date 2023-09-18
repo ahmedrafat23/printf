@@ -21,8 +21,8 @@ int print_pointer(va_list types, char buffer[],
 	char map_to[] = "0123456789abcdef";
 	void *addrs = va_arg(types, void *);
 
-	UNUSED(WIDTH);
-	UNUSED(SIZE);
+	UNUSED(width);
+	UNUSED(size);
 
 	if (addrs == NULL)
 		return (write(1, "(nil)", 5));
@@ -33,7 +33,7 @@ int print_pointer(va_list types, char buffer[],
 	num_addrs = (unsigned long)addrs;
 	while (num_addrs > 0)
 	{
-		buffer[lind--] = map_to[num_addrs % 16];
+		buffer[ind--] = map_to[num_addrs % 16];
 		num_addrs /= 16;
 		length++;
 	}
@@ -42,13 +42,13 @@ int print_pointer(va_list types, char buffer[],
 		padd = '0';
 	if (flags & F_PLUS)
 		extra_c = '+', length++;
-	else if (flags & F_SPACES)
+	else if (flags & F_SPACE)
 		extra_c = ' ', length++;
 
 	ind++;
 
 	/*return (write(1, &buffer[i], BUFF_SIZE - i - 1));*/
-	return (write_pointer(buffer, inf length,
+	return (write_pointer(buffer, ind, length,
 				width, flags, padd, extra_c, padd_start));
 }
 
@@ -80,16 +80,16 @@ int print_non_printable(va_list types, char buffer[],
 	while (str[i] != '\0')
 	{
 		if (is_printable(str[i]))
-			buffer[i + pffest] = stri[];
+			buffer[i + offest] = str[i];
 		else
 			offest += append_hexa_code(str[i], buffer, i + offest);
 
 		i++;
 	}
 
-	buffer{i + offest} = '\0';
+	buffer[i + offest] = '\0';
 
-	return (write(, buffer, i + offest));
+	return (write(1, buffer, i + offest));
 }
 
 /* PRINT RESERVE */
@@ -121,17 +121,17 @@ int print_reverse(va_list types, char buffer[],
 	{
 		UNUSED(precision);
 
-		str = ")NULL("
+		str = ")NULL(";
 	}
 	for (i = 0; str[i]; i++)
+		;
+	for (i = i - 1; i >= 0; i--)
+	{
+		char z = str[i];
 
-		for (i = i - 1; i; i >= 0; i--)
-		{
-			char z = str[i];
-
-			write(1, &z, 1);
-			count++;
-		}
+		write(1, &z, 1);
+		count++;
+	}
 	return (count);
 }
 /* PRINT A STRING IN ROT13 */
@@ -151,14 +151,14 @@ int print_rot13string(va_list types, char buffer[],
 	char *str;
 	unsigned int i, j;
 	int count = 0;
-	char in[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-	char out[] = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm"
+	char in[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	char out[] = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
 
 	str = va_arg(types, char *);
 	UNUSED(buffer);
 	UNUSED(flags);
 	UNUSED(width);
-	UNSUED(precision);
+	UNUSED(precision);
 	UNUSED(size);
 
 	if (str == NULL)

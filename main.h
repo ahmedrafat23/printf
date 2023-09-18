@@ -20,8 +20,6 @@
 
 /**
  * struct fmt - struct op
- * by joseph and ciny
- *
  * @fmt: The format.
  * @fn: The function associated.
  */
@@ -37,7 +35,7 @@ struct fmt
  * @fmt: The format.
  * @fm_t: the function associated.
  */
-typedef struct fm fmt_t;
+typedef struct fmt fmt_t;
 
 int _printf(const char *format, ...);
 int handle_print(const char *fmt, int *ind,
@@ -71,7 +69,7 @@ int print_hexa(va_list types, char map_tp[],
 		char buffer[], int flags, char flag_ch, int width, int precision, int size);
 
 /* Function to print non printabe characters */
-int print_non_prinable(va_list types, char buffer[],
+int print_non_printable(va_list types, char buffer[],
 		int flags, int width, int precision, int size);
 
 /* Function to print memory address */

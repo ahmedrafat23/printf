@@ -12,7 +12,7 @@
  * @size: size specifier
  * Return: Number of chars printed
  */
-int print_char(va_list types, char buffer[]
+int print_char(va_list types, char buffer[],
 		int flags, int width, int precision, int size)
 {
 	char c = va_arg(types, int);
@@ -31,48 +31,49 @@ int print_char(va_list types, char buffer[]
  * Return: Number of chars printed
  */
 int print_string(va_list types, char buffer[],
-		int flag, int width, int precision, int size)
+		int flags, int width, int precision, int size)
 {
 	int length = 0, i;
+	char *str = va_arg(types, char *);
+
+	UNUSED(types);
+	UNUSED(buffer);
+	UNUSED(flags);
+	UNUSED(width);
+	UNUSED(precision);
+	UNUSED(size);
+	if (str == NULL)
 	{
-                UNUSED(types);
-                UNUSED(buffer);
-                UNUSED(flags);
-                UNUSED(width);
-                UNUSED(preciion);
-                UNUSED(size);
-                if (str == NULL)
+		str = "(NULL)";
+		if (precision >= 6)
+			str = "      ";
+	}
+
+	while (str[length] != '\0')
+		length++;
+
+	if (precision >= 0 && precision < length)
+		length = precision;
+
+	if (width > length)
+	{
+		if (flags & F_MINUS)
 		{
-			str = "(NULL)";
-			if (precisin >= 6)
-				str = "      ";
+			write(1, &str[0], length);
+			for (i = width - length; i > 0; i--)
+				write(1, " ", 1);
 		}
-
-		while (str[length] != '\0')
-			length++;
-
-		if (precision >= 0 && precision < length)
-			length = precision;
-
-		if (width > length)
+		else
 		{
-			if (flags & F_MINUS)
-			{
-				writes(1, &str[0], length);
-				for (i = width - length; i > 0; i--)
-					write(1, " ", 1);
-			}
-			else
-			{
-				for (i = width - length; i > 0; i--)
-					write(1, " ",1);
-				write(1, &str[0], length);
-				return (width);
-			}
+			for (i = width - length; i > 0; i--)
+			write(1, " ",1);
+			write(1, &str[0], length);
+			return (width);
 		}
+	}
 
 		return (write(1, str, length));
-
+}
 /* PRINT PERCENT SIGN */
 /**
  * print_percent - prints a percent sign
@@ -84,17 +85,17 @@ int print_string(va_list types, char buffer[],
  * @size: specifier
  * Return: Number o chars printed
  */
-	int print_percent(va_list types, char buffer[],
-			int flags, int width, int precision, int size)
-	{
-		UNUSED(types);
-		UNUSED(buffer);
-		UNUSED(flags);
-		UNUSED(width);
-		UNUSED(preciion);
-		UNUSED(size);
-		return (write(1, "%%", 1));
-	}
+int print_percent(va_list types, char buffer[],
+		int flags, int width, int precision, int size)
+{
+	UNUSED(types);
+	UNUSED(buffer);
+	UNUSED(flags);
+	UNUSED(width);
+	UNUSED(precision);
+	UNUSED(size);
+	return (write(1, "%%", 1));
+}
 
 /* PRINT INT */
 /**
@@ -107,12 +108,12 @@ int print_string(va_list types, char buffer[],
  * @size: size specifier
  * Return: Number of chars printed
  */
-int print_int(va_list tupes, char buffer[],
+int print_int(va_list types, char buffer[],
 		int flags, int width, int precision, int size)
 {
 	int i = BUFF_SIZE - 2;
-	int is_negative = 0
-		long int n = va_arg(types, long int);
+	int is_negative = 0;
+	long int n = va_arg(types, long int);
 	unsigned long int num;
 
 	n = convert_size_number(n, size);
@@ -172,7 +173,8 @@ int print_binary(va_list types, char buffer[],
 	}
 	for (i = 0, sum = 0, count = 0; i < 32; i++)
 	{
-		sum += a[i];if (sum || i == 31)
+		sum += a[i];
+		if (sum || i == 31)
 		{
 			char z = '0' + a[i];
 
